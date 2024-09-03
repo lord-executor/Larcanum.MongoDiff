@@ -1,0 +1,15 @@
+﻿{
+    "_id": ObjectId("66c7091b4b5d3018e3cda214"),
+    "code": "LANG",
+    "firstname": "Lukas",
+    "lastname": "Angerer",
+    "email": "foo@bar.com",
+    "entryDate": "2024-03-01",
+    "dateOfBirth": null,
+    "team": "",
+    "teams": [
+        "Alpha"
+    ],
+    "branches": [],
+    "gender": "male"
+}

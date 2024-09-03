@@ -15,13 +15,12 @@ public class EntityDiff
         // - allow _excluding_ properties
 
         var changes = DetermineProps(previous, current)
-            .Select(item => item.Type switch
+            .SelectMany(item => item.Type switch
             {
-                BsonType.Array => ValueChange.FromArray(item.Prop, item.Left.AsBsonArray, item.Right.AsBsonArray),
+                BsonType.Array => ValueChange.FromArray(item.Prop, item.Left, item.Right),
+                BsonType.Document => ValueChange.FromDocument(item.Prop, item.Left, item.Right),
                 _ => ValueChange.FromSimpleValue(item.Prop, item.Left, item.Right)
             })
-            .Where(vc => vc != null)
-            .Cast<ValueChange>()
             .ToList();
 
         return new EntityDiff(changes);

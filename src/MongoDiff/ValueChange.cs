@@ -33,15 +33,43 @@ public record ValueChange(string Path, object? OldValue, object? NewValue)
     {
         if (left.IsBsonNull)
         {
-            yield return new ValueChange(path, null, right.AsBsonArray.Values);
+            return [new ValueChange(path, null, right.AsBsonArray.Values)];
         }
-        else if (right.IsBsonNull)
+        if (right.IsBsonNull)
         {
-            yield return new ValueChange(path, left.AsBsonArray.Values, null);
+            return [new ValueChange(path, left.AsBsonArray.Values, null)];
         }
-        else if (!left.AsBsonArray.SequenceEqual(right.AsBsonArray))
+
+        var item = left.AsBsonArray.Concat(right.AsBsonArray).FirstOrDefault();
+        if (item != null && item.IsBsonDocument && item.AsBsonDocument.Contains("_id") && item.AsBsonDocument["_id"].IsObjectId)
         {
-            yield return new ValueChange(path, left.AsBsonArray.Values, right.AsBsonArray.Values);
+            var changes = new List<ValueChange>();
+            var leftMap = left.AsBsonArray.Select(x => x.AsBsonDocument).ToDictionary(x => x["_id"]);
+            var rightMap = right.AsBsonArray.Select(x => x.AsBsonDocument).ToDictionary(x => x["_id"]);
+            var keys = leftMap.Keys.Union(rightMap.Keys).Order();
+            foreach (var id in keys)
+            {
+                if (leftMap.TryGetValue(id, out var leftDoc) && rightMap.TryGetValue(id, out var rightDoc))
+                {
+                    changes.AddRange(EntityDiff.Build(leftDoc, rightDoc).Changes.Select(change => change with { Path = $"{path}[@{id}].{change.Path}" }));
+                }
+                else if (leftMap.TryGetValue(id, out var value))
+                {
+                    changes.Add(new ValueChange($"{path}[@{id}]", value, null));
+                }
+                else
+                {
+                    changes.Add(new ValueChange($"{path}[@{id}]", null, rightMap[id]));
+                }
+            }
+            return changes;
         }
+
+        if (!left.AsBsonArray.SequenceEqual(right.AsBsonArray))
+        {
+            return [new ValueChange(path, left.AsBsonArray.Values, right.AsBsonArray.Values)];
+        }
+
+        return [];
     }
 }

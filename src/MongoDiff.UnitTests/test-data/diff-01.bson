@@ -1,0 +1,44 @@
+{
+    "changes": [
+        {
+            "path": "tags",
+            "oldValue": [
+                "test",
+                "sample"
+            ],
+            "newValue": [
+                "test",
+                "sample2"
+            ]
+        },
+        {
+            "path": "parent.date",
+            "oldValue": "2024-08-01",
+            "newValue": "2024-08-02"
+        },
+        {
+            "path": "parent.children[@66d9a875cd623781abb13da2].age",
+            "oldValue": 92,
+            "newValue": 37
+        },
+        {
+            "path": "parent.children[@66d9a875cd623781abb13da3].age",
+            "oldValue": 70,
+            "newValue": 45
+        },
+        {
+            "path": "parent.children[@66d9a875cd623781abb13da4].age",
+            "oldValue": 90,
+            "newValue": 2
+        },
+        {
+            "path": "parent.children[@66d9a8e4981a3be6203ae16c]",
+            "oldValue": null,
+            "newValue": {
+                "_id": ObjectId("66d9a8e4981a3be6203ae16c"),
+                "name": "C4",
+                "age": 96
+            }
+        }
+    ]
+}

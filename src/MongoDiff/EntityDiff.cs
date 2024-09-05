@@ -78,7 +78,7 @@ public class EntityDiff
 
     public IList<ValueChange> Changes { get; }
 
-    private EntityDiff(IList<ValueChange> changes)
+    public EntityDiff(IList<ValueChange> changes)
     {
         Changes = changes;
     }

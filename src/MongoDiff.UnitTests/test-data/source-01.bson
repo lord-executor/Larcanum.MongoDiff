@@ -1,0 +1,35 @@
+{
+    "_id": ObjectId("66d9a875cd623781abb13d9f"),
+    "tags": [
+        "test",
+        "sample"
+    ],
+    "doc": {
+        "_id": ObjectId("66d9a875cd623781abb13da0"),
+        "name": "Pure Doc",
+        "age": 0
+    },
+    "parent": {
+        "_id": ObjectId("66d9a875cd623781abb13da1"),
+        "date": "2024-08-01",
+        "children": [
+            {
+                "_id": ObjectId("66d9a875cd623781abb13da2"),
+                "name": "C1",
+                "age": 92
+            },
+            {
+                "_id": ObjectId("66d9a875cd623781abb13da3"),
+                "name": "C2",
+                "age": 70
+            },
+            {
+                "_id": ObjectId("66d9a875cd623781abb13da4"),
+                "name": "C3",
+                "age": 90
+            }
+        ]
+    },
+    "node": null,
+    "next": null
+}

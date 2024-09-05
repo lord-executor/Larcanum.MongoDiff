@@ -1,0 +1,41 @@
+{
+    "changes": [
+        {
+            "path": "node.left.name",
+            "oldValue": "Left Node",
+            "newValue": "No longer Left"
+        },
+        {
+            "path": "node.left.left",
+            "oldValue": null,
+            "newValue": {
+                "name": "Left of no longer left",
+                "left": null,
+                "right": null
+            }
+        },
+        {
+            "path": "node.left.right.name",
+            "oldValue": "Right of Left Node",
+            "newValue": "Two places at once"
+        },
+        {
+            "path": "node.right.right",
+            "oldValue": null,
+            "newValue": {
+                "name": "Two places at once",
+                "left": null,
+                "right": null
+            }
+        },
+        {
+            "path": "next.node.right",
+            "oldValue": null,
+            "newValue": {
+                "name": "Two places at once",
+                "left": null,
+                "right": null
+            }
+        }
+    ]
+}

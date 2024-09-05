@@ -18,42 +18,43 @@ public class ComplexStructureTests
         MongoDBConfig.Initialize();
     }
 
-    [Fact]
-    public void EntityDiff_ComplexObjectChanges_CreatesExpectedDiff()
-    {
-        var parent = new AllInOneEntity()
-        {
-            Id = ObjectId.GenerateNewId(),
-            Tags = ["test", "sample2"],
-            Doc = new ChildEntity() { Id = ObjectId.GenerateNewId(), Name = "Pure Doc" }.ToBsonDocument(),
-            Parent = new ParentEntity() {
-                Id = ObjectId.GenerateNewId(),
-                Date = new DateOnly(2024, 8, 2),
-                Children =
-                [
-                    CreateChildEntity("C1"),
-                    CreateChildEntity("C2"),
-                    CreateChildEntity("C3"),
-                    CreateChildEntity("C4"),
-                ]
-            }
-        };
-        _output.WriteLine(parent.ToBsonDocument().ToString());
-    }
-
-    [Theory]
-    [InlineData("test-data/source-01.bson", "test-data/target-01.bson")]
-    public void GetDiff(string source, string target)
-    {
-        var sourceDoc = BsonSerializer.Deserialize<BsonDocument>(File.ReadAllText(source));
-        var targetDoc = BsonSerializer.Deserialize<BsonDocument>(File.ReadAllText(target));
-
-        var diff = EntityDiff.Build(sourceDoc, targetDoc);
-        _output.WriteLine(diff.ToBsonDocument().ToString());
-    }
+    // [Fact]
+    // public void EntityDiff_ComplexObjectChanges_CreatesExpectedDiff()
+    // {
+    //     var root = new TreeNode("Root Node",
+    //         new TreeNode("Left Node", null, new TreeNode("Right of Left Node")),
+    //         new TreeNode("Right Node"));
+    //     var parent = new AllInOneEntity()
+    //     {
+    //         Id = ObjectId.GenerateNewId(),
+    //         Node = root,
+    //         Next = new AllInOneEntity
+    //         {
+    //             Id = ObjectId.GenerateNewId(),
+    //             Tags = ["next"],
+    //             Node = root.Right
+    //         }
+    //     };
+    //
+    //     var sourceDoc = parent.ToBsonDocument();
+    //     _output.WriteLine(sourceDoc.ToString());
+    //
+    //     root.Right!.Right = root.Left!.Right;
+    //     root.Left.Name = "No longer Left";
+    //     root.Left.Left = new TreeNode("Left of no longer left");
+    //     parent.Next!.Node!.Right!.Name = "Two places at once";
+    //
+    //     var targetDoc = parent.ToBsonDocument();
+    //     _output.WriteLine(targetDoc.ToString());
+    //
+    //     var diff = EntityDiff.Build(sourceDoc, targetDoc);
+    //     _output.WriteLine(diff.ToBsonDocument().ToString());
+    // }
 
     [Theory]
     [InlineData("test-data/source-01.bson", "test-data/target-01.bson", "test-data/diff-01.bson")]
+    [InlineData("test-data/source-02.bson", "test-data/target-02.bson", "test-data/diff-02.bson")]
+    [InlineData("test-data/source-03.bson", "test-data/target-03.bson", "test-data/diff-03.bson")]
     public void EntityDiff_WithKnownSourceAndTarget_CreatesExpectedDiff(string source, string target, string diff)
     {
         var sourceDoc = BsonSerializer.Deserialize<BsonDocument>(File.ReadAllText(source));

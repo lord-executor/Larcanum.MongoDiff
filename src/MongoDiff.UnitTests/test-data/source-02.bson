@@ -1,0 +1,22 @@
+{
+    "_id": ObjectId("66d9c84cdb21b51b9994c6ec"),
+    "tags": [],
+    "doc": {
+        "_id": ObjectId("66d9c84cdb21b51b9994c6eb"),
+        "name": "Pure Doc",
+        "age": 0
+    },
+    "parent": {
+        "_id": ObjectId("66d9c84cdb21b51b9994c6ed"),
+        "date": "2024-08-01",
+        "children": [
+            {
+                "_id": ObjectId("66d9c84cdb21b51b9994c6ee"),
+                "name": "C1",
+                "age": 83
+            }
+        ]
+    },
+    "node": null,
+    "next": null
+}

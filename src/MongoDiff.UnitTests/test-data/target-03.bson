@@ -1,0 +1,53 @@
+{
+    "_id": ObjectId("66d9caa2fd671015b34d018b"),
+    "tags": [],
+    "doc": {
+        "_csharpnull": true
+    },
+    "parent": null,
+    "node": {
+        "name": "Root Node",
+        "left": {
+            "name": "No longer Left",
+            "left": {
+                "name": "Left of no longer left",
+                "left": null,
+                "right": null
+            },
+            "right": {
+                "name": "Two places at once",
+                "left": null,
+                "right": null
+            }
+        },
+        "right": {
+            "name": "Right Node",
+            "left": null,
+            "right": {
+                "name": "Two places at once",
+                "left": null,
+                "right": null
+            }
+        }
+    },
+    "next": {
+        "_id": ObjectId("66d9caa2fd671015b34d018c"),
+        "tags": [
+            "next"
+        ],
+        "doc": {
+            "_csharpnull": true
+        },
+        "parent": null,
+        "node": {
+            "name": "Right Node",
+            "left": null,
+            "right": {
+                "name": "Two places at once",
+                "left": null,
+                "right": null
+            }
+        },
+        "next": null
+    }
+}

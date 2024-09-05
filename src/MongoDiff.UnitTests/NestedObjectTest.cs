@@ -59,9 +59,9 @@ public class NestedObjectTest
 
         changes["left"].OldValue.Should().BeOfType<BsonDocument>();
         changes["left"].OldValue!.ToString().Should().Be("""{ "name" : "left", "left" : { "name" : "left-left", "left" : null, "right" : null }, "right" : null }""");
-        changes["left"].NewValue.Should().BeNull();
+        changes["left"].NewValue.Should().Be(BsonNull.Value);
 
-        changes["right.right"].OldValue.Should().BeNull();
+        changes["right.right"].OldValue.Should().Be(BsonNull.Value);
         changes["right.right"].NewValue.Should().BeOfType<BsonDocument>();
         changes["right.right"].NewValue!.ToString().Should().Be("""{ "name" : "right-right-new", "left" : null, "right" : null }""");
     }

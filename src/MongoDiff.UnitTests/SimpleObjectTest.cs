@@ -67,7 +67,7 @@ public class SimpleObjectTest
             .Which.Select(v => v.AsString).Should().BeEquivalentTo(entity.Branches);
 
         var dateOfBirthChange = diff.Changes.Single(c => c.Path == "dateOfBirth");
-        dateOfBirthChange.OldValue.Should().BeNull();
+        dateOfBirthChange.OldValue.Should().Be(BsonNull.Value);
         dateOfBirthChange.NewValue.Should().Be("1980-01-01");
 
         var lastnameChange = diff.Changes.Single(c => c.Path == "lastname");

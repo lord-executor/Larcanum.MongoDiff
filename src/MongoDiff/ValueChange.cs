@@ -2,7 +2,7 @@
 
 namespace MongoDiff;
 
-public record ValueChange(string Path, object? OldValue, object? NewValue)
+public record ValueChange(string Path, BsonValue OldValue, BsonValue NewValue)
 {
     public static IEnumerable<ValueChange> FromSimpleValue(string path, BsonValue left, BsonValue right)
     {
@@ -10,7 +10,7 @@ public record ValueChange(string Path, object? OldValue, object? NewValue)
         var rValue = BsonTypeMapper.MapToDotNetValue(right);
         if (!object.Equals(lValue, rValue))
         {
-            yield return new ValueChange(path, lValue, rValue);
+            yield return new ValueChange(path, left, right);
         }
     }
 
@@ -18,11 +18,11 @@ public record ValueChange(string Path, object? OldValue, object? NewValue)
     {
         if (left.IsBsonNull)
         {
-            return [new ValueChange(path, null, right.AsBsonDocument)];
+            return [new ValueChange(path, BsonNull.Value, right.AsBsonDocument)];
         }
         if (right.IsBsonNull)
         {
-            return [new ValueChange(path, left.AsBsonDocument, null)];
+            return [new ValueChange(path, left.AsBsonDocument, BsonNull.Value)];
         }
 
         var diff = EntityDiff.Build(left.AsBsonDocument, right.AsBsonDocument);
@@ -33,11 +33,11 @@ public record ValueChange(string Path, object? OldValue, object? NewValue)
     {
         if (left.IsBsonNull)
         {
-            return [new ValueChange(path, null, right.AsBsonArray.Values)];
+            return [new ValueChange(path, BsonNull.Value, right.AsBsonArray)];
         }
         if (right.IsBsonNull)
         {
-            return [new ValueChange(path, left.AsBsonArray.Values, null)];
+            return [new ValueChange(path, left.AsBsonArray, BsonNull.Value)];
         }
 
         var item = left.AsBsonArray.Concat(right.AsBsonArray).FirstOrDefault();
@@ -55,11 +55,11 @@ public record ValueChange(string Path, object? OldValue, object? NewValue)
                 }
                 else if (leftMap.TryGetValue(id, out var value))
                 {
-                    changes.Add(new ValueChange($"{path}[@{id}]", value, null));
+                    changes.Add(new ValueChange($"{path}[@{id}]", value, BsonNull.Value));
                 }
                 else
                 {
-                    changes.Add(new ValueChange($"{path}[@{id}]", null, rightMap[id]));
+                    changes.Add(new ValueChange($"{path}[@{id}]", BsonNull.Value, rightMap[id]));
                 }
             }
             return changes;
@@ -67,7 +67,7 @@ public record ValueChange(string Path, object? OldValue, object? NewValue)
 
         if (!left.AsBsonArray.SequenceEqual(right.AsBsonArray))
         {
-            return [new ValueChange(path, left.AsBsonArray.Values, right.AsBsonArray.Values)];
+            return [new ValueChange(path, left.AsBsonArray, right.AsBsonArray)];
         }
 
         return [];

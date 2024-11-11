@@ -1,4 +1,4 @@
-﻿namespace MongoDiff.UnitTests;
+﻿namespace Larcanum.MongoDiff.UnitTests;
 
 public class TreeNode
 {

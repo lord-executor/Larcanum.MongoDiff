@@ -4,7 +4,7 @@ using MongoDB.Bson;
 
 using Xunit;
 
-namespace MongoDiff.UnitTests;
+namespace Larcanum.MongoDiff.UnitTests;
 
 public class NestedObjectTest
 {

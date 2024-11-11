@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson;
 
-namespace MongoDiff.UnitTests;
+namespace Larcanum.MongoDiff.UnitTests;
 
 public class AllInOneEntity
 {

@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 
-namespace MongoDiff.UnitTests;
+namespace Larcanum.MongoDiff.UnitTests;
 
 /// <summary>
 /// Serialized as an ISO 8601 time string with millisecond accuracy. Note that <see cref="TimeOnly"/> represents

@@ -5,7 +5,7 @@ using MongoDB.Bson.Serialization;
 
 using Xunit;
 
-namespace MongoDiff.UnitTests;
+namespace Larcanum.MongoDiff.UnitTests;
 
 public class SimpleObjectTest
 {

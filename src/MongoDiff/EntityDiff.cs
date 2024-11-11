@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson;
 
-namespace MongoDiff;
+namespace Larcanum.MongoDiff;
 
 public class EntityDiff
 {

@@ -6,7 +6,7 @@ using MongoDB.Bson.Serialization;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace MongoDiff.UnitTests;
+namespace Larcanum.MongoDiff.UnitTests;
 
 public class ComplexStructureTests
 {

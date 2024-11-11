@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson;
 
-namespace MongoDiff;
+namespace Larcanum.MongoDiff;
 
 public record ValueChange(string Path, BsonValue OldValue, BsonValue NewValue)
 {

@@ -1,17 +1,17 @@
 {
     "changes": [
         {
-            "path": "doc.name",
+            "path": "$.doc.name",
             "oldValue": "Pure Doc",
             "newValue": "Modified"
         },
         {
-            "path": "doc.age",
+            "path": "$.doc.age",
             "oldValue": 0,
             "newValue": 42
         },
         {
-            "path": "parent.children[@66d9c84cdb21b51b9994c6ee].age",
+            "path": "$.parent.children[@66d9c84cdb21b51b9994c6ee].age",
             "oldValue": 83,
             "newValue": 23
         }

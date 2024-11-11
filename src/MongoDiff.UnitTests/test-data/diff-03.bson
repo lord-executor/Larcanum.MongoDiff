@@ -1,12 +1,12 @@
 {
     "changes": [
         {
-            "path": "node.left.name",
+            "path": "$.node.left.name",
             "oldValue": "Left Node",
             "newValue": "No longer Left"
         },
         {
-            "path": "node.left.left",
+            "path": "$.node.left.left",
             "oldValue": null,
             "newValue": {
                 "name": "Left of no longer left",
@@ -15,12 +15,12 @@
             }
         },
         {
-            "path": "node.left.right.name",
+            "path": "$.node.left.right.name",
             "oldValue": "Right of Left Node",
             "newValue": "Two places at once"
         },
         {
-            "path": "node.right.right",
+            "path": "$.node.right.right",
             "oldValue": null,
             "newValue": {
                 "name": "Two places at once",
@@ -29,7 +29,7 @@
             }
         },
         {
-            "path": "next.node.right",
+            "path": "$.next.node.right",
             "oldValue": null,
             "newValue": {
                 "name": "Two places at once",

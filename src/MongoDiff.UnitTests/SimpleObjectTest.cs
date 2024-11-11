@@ -58,23 +58,23 @@ public class SimpleObjectTest
 
         diff.Changes.Should().HaveCount(4);
         diff.Changes.Select(c => c.Path).Order().Should()
-            .ContainInOrder(["branches", "dateOfBirth", "lastname", "teams"]);
+            .ContainInOrder(["$.branches", "$.dateOfBirth", "$.lastname", "$.teams"]);
 
-        var branchesChange = diff.Changes.Single(c => c.Path == "branches");
+        var branchesChange = diff.Changes.Single(c => c.Path == "$.branches");
         branchesChange.OldValue.Should().BeAssignableTo<IEnumerable<BsonValue>>()
             .Which.Should().BeEmpty();
         branchesChange.NewValue.Should().BeAssignableTo<IEnumerable<BsonValue>>()
             .Which.Select(v => v.AsString).Should().BeEquivalentTo(entity.Branches);
 
-        var dateOfBirthChange = diff.Changes.Single(c => c.Path == "dateOfBirth");
+        var dateOfBirthChange = diff.Changes.Single(c => c.Path == "$.dateOfBirth");
         dateOfBirthChange.OldValue.Should().Be(BsonNull.Value);
         dateOfBirthChange.NewValue.Should().Be("1980-01-01");
 
-        var lastnameChange = diff.Changes.Single(c => c.Path == "lastname");
+        var lastnameChange = diff.Changes.Single(c => c.Path == "$.lastname");
         lastnameChange.OldValue.Should().Be("Angerer");
         lastnameChange.NewValue.Should().Be("Osteron");
 
-        var teamsChange = diff.Changes.Single(c => c.Path == "teams");
+        var teamsChange = diff.Changes.Single(c => c.Path == "$.teams");
         teamsChange.OldValue.Should().BeAssignableTo<IEnumerable<BsonValue>>()
             .Which.Select(v => v.AsString).Should().BeEquivalentTo("Alpha");
         teamsChange.NewValue.Should().BeAssignableTo<IEnumerable<BsonValue>>()

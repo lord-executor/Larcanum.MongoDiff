@@ -57,11 +57,11 @@ public class ComplexStructureTests
     [InlineData("test-data/source-03.bson", "test-data/target-03.bson", "test-data/diff-03.bson")]
     public void EntityDiff_WithKnownSourceAndTarget_CreatesExpectedDiff(string source, string target, string diff)
     {
-        var sourceDoc = BsonSerializer.Deserialize<BsonDocument>(File.ReadAllText(source));
-        var targetDoc = BsonSerializer.Deserialize<BsonDocument>(File.ReadAllText(target));
+        var sourceDoc = BsonSerializer.Deserialize<AllInOneEntity>(File.ReadAllText(source));
+        var targetDoc = BsonSerializer.Deserialize<AllInOneEntity>(File.ReadAllText(target));
         var expectedDiff = BsonSerializer.Deserialize<BsonDocument>(File.ReadAllText(diff));
 
-        var entityDiff = EntityDiff.Build(sourceDoc, targetDoc);
+        var entityDiff = EntityDiff.Build(sourceDoc.ToBsonDocument(), targetDoc.ToBsonDocument());
         expectedDiff.Equals(entityDiff.ToBsonDocument()).Should().BeTrue();
     }
 

@@ -74,7 +74,7 @@ public class ChildEntityArrayTest
         var changes = EntityDiff.Build(left, parent.ToBsonDocument()).Changes;
         changes.Should().HaveCount(1);
         var nameChange = changes.Single();
-        nameChange.Path.Should().Be($"children[@{second.Id}].name");
+        nameChange.Path.Should().Be($"$.children[@{second.Id}].name");
         nameChange.OldValue.Should().Be("Second");
         nameChange.NewValue.Should().Be("Updated");
     }

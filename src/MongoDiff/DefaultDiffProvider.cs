@@ -11,61 +11,62 @@ public partial class DefaultDiffProvider : IDiffProvider
         _modelMetadata = modelMetadata;
     }
 
-    public IEnumerable<ValueChange> FromSimpleValue(Path path, BsonValue left, BsonValue right)
+    public IEnumerable<ValueChange> FromSimpleValue(PropItem prop)
     {
-        var lValue = BsonTypeMapper.MapToDotNetValue(left);
-        var rValue = BsonTypeMapper.MapToDotNetValue(right);
+        var lValue = BsonTypeMapper.MapToDotNetValue(prop.Left);
+        var rValue = BsonTypeMapper.MapToDotNetValue(prop.Right);
         if (!Equals(lValue, rValue))
         {
-            yield return new ValueChange(path.FullPath(), left, right);
+            yield return new ValueChange(prop.Path.FullPath(), prop.Left, prop.Right);
         }
     }
 
-    public IEnumerable<ValueChange> FromDocument(Path path, BsonValue left, BsonValue right)
+    public IEnumerable<ValueChange> FromDocument(PropItem prop)
     {
-        if (left.IsBsonNull)
+        if (prop.Left.IsBsonNull)
         {
-            return [new ValueChange(path.FullPath(), BsonNull.Value, right.AsBsonDocument)];
+            return [new ValueChange(prop.Path.FullPath(), BsonNull.Value, prop.Right.AsBsonDocument)];
         }
-        if (right.IsBsonNull)
+        if (prop.Right.IsBsonNull)
         {
-            return [new ValueChange(path.FullPath(), left.AsBsonDocument, BsonNull.Value)];
+            return [new ValueChange(prop.Path.FullPath(), prop.Left.AsBsonDocument, BsonNull.Value)];
         }
 
-        return DetermineProps(path, left.AsBsonDocument, right.AsBsonDocument)
+        return DetermineProps(prop.Path, prop.Left.AsBsonDocument, prop.Right.AsBsonDocument)
             .Where(item => !item.Config.Ignore)
             .SelectMany(item => item.Type switch
             {
-                BsonType.Array => FromArray(item.Prop, item.Left, item.Right),
-                BsonType.Document => FromDocument(item.Prop, item.Left, item.Right),
-                _ => FromSimpleValue(item.Prop, item.Left, item.Right)
+                BsonType.Array => FromArray(item),
+                BsonType.Document => FromDocument(item),
+                _ => FromSimpleValue(item)
             });
     }
 
-    public IEnumerable<ValueChange> FromArray(Path path, BsonValue left, BsonValue right)
+    public IEnumerable<ValueChange> FromArray(PropItem prop)
     {
-        if (left.IsBsonNull)
+        if (prop.Left.IsBsonNull)
         {
-            return [new ValueChange(path.FullPath(), BsonNull.Value, right.AsBsonArray)];
+            return [new ValueChange(prop.Path.FullPath(), BsonNull.Value, prop.Right.AsBsonArray)];
         }
-        if (right.IsBsonNull)
+        if (prop.Right.IsBsonNull)
         {
-            return [new ValueChange(path.FullPath(), left.AsBsonArray, BsonNull.Value)];
+            return [new ValueChange(prop.Path.FullPath(), prop.Left.AsBsonArray, BsonNull.Value)];
         }
 
-        var item = left.AsBsonArray.Concat(right.AsBsonArray).FirstOrDefault();
+        var item = prop.Left.AsBsonArray.Concat(prop.Right.AsBsonArray).FirstOrDefault();
+        // TODO: use PropItemConfig.ItemKey (also, we might have to wrap this with a ToString and FromString factory)
         if (item != null && item.IsBsonDocument && item.AsBsonDocument.Contains("_id") && item.AsBsonDocument["_id"].IsObjectId)
         {
             var changes = new List<ValueChange>();
-            var leftMap = left.AsBsonArray.Select(x => x.AsBsonDocument).ToDictionary(x => x["_id"]);
-            var rightMap = right.AsBsonArray.Select(x => x.AsBsonDocument).ToDictionary(x => x["_id"]);
+            var leftMap = prop.Left.AsBsonArray.Select(x => x.AsBsonDocument).ToDictionary(x => x["_id"]);
+            var rightMap = prop.Right.AsBsonArray.Select(x => x.AsBsonDocument).ToDictionary(x => x["_id"]);
             var keys = leftMap.Keys.Union(rightMap.Keys).Order();
             foreach (var id in keys)
             {
-                Path itemPath = path.Append(new CollectionItemSegment(id.ToString()!));
+                var itemPath = prop.Path.Append(new CollectionItemSegment(id.ToString()!));
                 if (leftMap.TryGetValue(id, out var leftDoc) && rightMap.TryGetValue(id, out var rightDoc))
                 {
-                    changes.AddRange(FromDocument(itemPath, leftDoc, rightDoc));
+                    changes.AddRange(this.FromDocument(itemPath, leftDoc, rightDoc));
                 }
                 else if (leftMap.TryGetValue(id, out var value))
                 {
@@ -79,9 +80,9 @@ public partial class DefaultDiffProvider : IDiffProvider
             return changes;
         }
 
-        if (!left.AsBsonArray.SequenceEqual(right.AsBsonArray))
+        if (!prop.Left.AsBsonArray.SequenceEqual(prop.Right.AsBsonArray))
         {
-            return [new ValueChange(path.FullPath(), left.AsBsonArray, right.AsBsonArray)];
+            return [new ValueChange(prop.Path.FullPath(), prop.Left.AsBsonArray, prop.Right.AsBsonArray)];
         }
 
         return [];

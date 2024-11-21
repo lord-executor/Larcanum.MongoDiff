@@ -4,7 +4,15 @@ namespace Larcanum.MongoDiff;
 
 public interface IDiffProvider
 {
-    IEnumerable<ValueChange> FromSimpleValue(Path path, BsonValue left, BsonValue right);
-    IEnumerable<ValueChange> FromDocument(Path path, BsonValue left, BsonValue right);
-    IEnumerable<ValueChange> FromArray(Path path, BsonValue left, BsonValue right);
+    IEnumerable<ValueChange> FromSimpleValue(PropItem prop);
+    IEnumerable<ValueChange> FromDocument(PropItem prop);
+    IEnumerable<ValueChange> FromArray(PropItem prop);
+}
+
+public static class DiffProviderExtensions
+{
+    public static IEnumerable<ValueChange> FromDocument(this IDiffProvider diffProvider, Path path, BsonDocument left, BsonDocument right)
+    {
+        return diffProvider.FromDocument(new PropItem(path, new PropItemConfig(), BsonType.Document, left, right));
+    }
 }

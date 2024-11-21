@@ -2,4 +2,4 @@
 
 namespace Larcanum.MongoDiff;
 
-public record PropItem(Path Prop, PropItemConfig Config, BsonType Type, BsonValue Left, BsonValue Right);
+public record PropItem(Path Path, PropItemConfig Config, BsonType Type, BsonValue Left, BsonValue Right);

@@ -1,8 +1,9 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections;
+using System.Text.RegularExpressions;
 
 namespace Larcanum.MongoDiff;
 
-public partial class Path
+public partial class Path : IEnumerable<IPathSegment>
 {
     [GeneratedRegex(@"\G(\$)|\G\.(\w+)|\G\[@([^\]]+?)\]")]
     private static partial Regex SegmentExpression();
@@ -56,4 +57,14 @@ public partial class Path
     }
 
     public string FullPath() => string.Join(string.Empty, _segments);
+
+    public IEnumerator<IPathSegment> GetEnumerator()
+    {
+        return _segments.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 }

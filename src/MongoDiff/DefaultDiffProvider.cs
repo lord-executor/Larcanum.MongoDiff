@@ -54,12 +54,11 @@ public partial class DefaultDiffProvider : IDiffProvider
         }
 
         var item = prop.Left.AsBsonArray.Concat(prop.Right.AsBsonArray).FirstOrDefault();
-        // TODO: use PropItemConfig.ItemKey (also, we might have to wrap this with a ToString and FromString factory)
-        if (item != null && item.IsBsonDocument && item.AsBsonDocument.Contains("_id") && item.AsBsonDocument["_id"].IsObjectId)
+        if (item != null && item.IsBsonDocument && prop.Config.Key != null)
         {
             var changes = new List<ValueChange>();
-            var leftMap = prop.Left.AsBsonArray.Select(x => x.AsBsonDocument).ToDictionary(x => x["_id"]);
-            var rightMap = prop.Right.AsBsonArray.Select(x => x.AsBsonDocument).ToDictionary(x => x["_id"]);
+            var leftMap = prop.Left.AsBsonArray.Select(x => x.AsBsonDocument).ToDictionary(prop.Config.Key.ExtractKey);
+            var rightMap = prop.Right.AsBsonArray.Select(x => x.AsBsonDocument).ToDictionary(prop.Config.Key.ExtractKey);
             var keys = leftMap.Keys.Union(rightMap.Keys).Order();
             foreach (var id in keys)
             {

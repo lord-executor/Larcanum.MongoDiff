@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Text.RegularExpressions;
 
+using MongoDB.Bson;
+
 namespace Larcanum.MongoDiff;
 
 public partial class Path : IEnumerable<IPathSegment>
@@ -46,7 +48,7 @@ public partial class Path : IEnumerable<IPathSegment>
     {
     }
 
-    private Path(IEnumerable<IPathSegment> segments)
+    public Path(IEnumerable<IPathSegment> segments)
     {
         _segments = segments.ToList();
     }

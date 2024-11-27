@@ -1,0 +1,5 @@
+{
+    "_id": ObjectId("66d9a875cd623781abb13da1"),
+    "date": "2024-08-01",
+    "children": ["a" "f", "c", "g", "d", "f"]
+}

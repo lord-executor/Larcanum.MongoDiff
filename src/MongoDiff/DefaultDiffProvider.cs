@@ -81,7 +81,27 @@ public partial class DefaultDiffProvider : IDiffProvider
 
         if (!prop.Left.AsBsonArray.SequenceEqual(prop.Right.AsBsonArray))
         {
-            return [new ValueChange(prop.Path.FullPath(), prop.Left.AsBsonArray, prop.Right.AsBsonArray)];
+            var changes = new List<ValueChange>();
+            var leftMap = prop.Left.AsBsonArray.Select(x => x.AsBsonDocument).Index().ToDictionary(x => x.Index, x => x.Item);
+            var rightMap = prop.Right.AsBsonArray.Select(x => x.AsBsonDocument).Index().ToDictionary(x => x.Index, x => x.Item);
+            var keys = leftMap.Keys.Union(rightMap.Keys).Order();
+            foreach (var id in keys)
+            {
+                var itemPath = prop.Path.Append(new CollectionItemSegment(id.ToString()!));
+                if (leftMap.TryGetValue(id, out var leftDoc) && rightMap.TryGetValue(id, out var rightDoc))
+                {
+                    changes.AddRange(this.FromDocument(itemPath, leftDoc, rightDoc));
+                }
+                else if (leftMap.TryGetValue(id, out var value))
+                {
+                    changes.Add(new ValueChange(itemPath.FullPath(), value, BsonNull.Value));
+                }
+                else
+                {
+                    changes.Add(new ValueChange(itemPath.FullPath(), BsonNull.Value, rightMap[id]));
+                }
+            }
+            return changes;
         }
 
         return [];
